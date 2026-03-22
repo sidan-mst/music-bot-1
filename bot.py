@@ -72,10 +72,17 @@ async def download_audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"❌ Error: {e}")
 
 # 🚀 MAIN
-app = ApplicationBuilder().token(BOT_TOKEN).build()
+import asyncio
 
-app.add_handler(CommandHandler("start", start))
-app.add_handler(CallbackQueryHandler(check_subscription, pattern="check"))
-app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, download_audio))
+async def main():
+    app = ApplicationBuilder().token(BOT_TOKEN).build()
 
-app.run_polling()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CallbackQueryHandler(check_subscription, pattern="check"))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, download_audio))
+
+    print("Bot started...")
+    await app.run_polling()
+
+if __name__ == "__main__":
+    asyncio.run(main())
